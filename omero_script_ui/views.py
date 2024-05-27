@@ -41,3 +41,11 @@ def index(request, conn=None, **kwargs):
 
     # Render the html template and return the http response
     return render(request, "omero_script_ui/index.html", context)
+
+
+@login_required()
+def import_from_csv(request, conn=None, **kwargs):
+
+    context = {}
+
+    return render(request, "omero_script_ui/import_from_csv.html", context)
