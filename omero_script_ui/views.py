@@ -104,13 +104,13 @@ def post_file_annotation(request, conn=None, **kwargs):
 
 
 @login_required()
-def read_csv_annotation(request, annId, conn=None, **kwargs):
+def read_csv_annotation(request, ann_id, conn=None, **kwargs):
     """
     Use read_csv() function copied from Import_from_csv script
     Returns JSON of rows (first 10), header, namespaces and row_count
     """
 
-    file_ann = conn.getObject("Annotation", annId)
+    file_ann = conn.getObject("Annotation", ann_id)
     if file_ann is None:
         return JsonResponse({"Error": "Annotation not Found"})
     original_file = file_ann.getFile()
