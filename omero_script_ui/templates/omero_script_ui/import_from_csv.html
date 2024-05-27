@@ -73,7 +73,7 @@
     <link rel="icon" href="/favicon.ico" type="image/x-icon" />
   </head>
   <body>
-    <form id="script_form" method="post" action="{% url 'script_run' script_id %}">
+    <form id="script_form" enctype="multipart/form-data" method="post" action="{% url 'script_run' script_id %}">
       {% csrf_token %}
       <div style="padding: 10px; margin-bottom: 40px">
         <h3 id="scriptName">Import from CSV</h3>
