@@ -18,6 +18,7 @@
 
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
+from django.urls import reverse
 
 from django.template import loader
 from django.templatetags import static
@@ -68,6 +69,10 @@ def index(request, conn=None, **kwargs):
     static_dir = static.static('omero_script_ui/')
     html = html.replace('href="/', 'href="%s' % static_dir)
     html = html.replace('src="/', 'src="%s' % static_dir)
+
+    omeroweb_index = reverse("index")
+    html = html.replace('const BASE_OMEROWEB_URL = DEV_OMEROWEB_URL;',
+                        'const BASE_OMEROWEB_URL = "%s";' % omeroweb_index)
 
     return HttpResponse(html)
 
