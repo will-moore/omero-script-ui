@@ -66,6 +66,11 @@
       .highlight {
         background-color: yellow;
       }
+      #csv_info {
+        overflow: auto;
+        max-width: 100%;
+        max-height: 300px;
+      }
     </style>
 
     <!-- extend here to add page title -->
@@ -103,6 +108,10 @@
           {{ source_names|join:", " }}
         </h3>
         {% endif %}
+
+        <div id="csv_info">
+          <h3>Drag and Drop your CSV file here...</h3>
+        </div>
 
         <div class="required parent">
           <div class="param" title="Data type of the parent objects.">
@@ -492,8 +501,40 @@
     </form>
 
     <script>
-        // AJAX-form handling: Submits the form via AJAX and shows alert message.
-        document.getElementById('script_form').addEventListener('submit', function (event) {
+      const SCRIPTUI_INDEX = "{% url 'omero_script_ui_index' %}";
+
+      document.getElementById("File_Annotation").addEventListener("input", function(event){
+        loadCsvFileAnnotation(event.target.value);
+      })
+
+      function loadCsvFileAnnotation(annId) {
+        let url = `${SCRIPTUI_INDEX}read_csv_annotation/${annId}/`;
+
+        fetch(url).then(rsp => rsp.json())
+        .then(data => {
+          console.log(data);
+          if (data.Error) {
+            // TODO: show message to user
+            console.error(data.Error);
+          } else {
+            let csv_table = `
+              <table>
+                <tr>
+                ${data.header.map(colName => `<th>${colName}</th>`).join("")}
+                </tr>
+                ${data.rows.map(row => `<tr>
+                    ${row.map(val => `<td>${val}</td>`).join("")}
+                  </tr>`
+                ).join("")}
+              </table>
+            `
+            document.getElementById("csv_info").innerHTML = csv_table;
+          }
+        })
+      }
+
+      // AJAX-form handling: Submits the form via AJAX and shows alert message.
+      document.getElementById('script_form').addEventListener('submit', function (event) {
         var data = this;
         fetch(data.getAttribute('action'), {
           method: data.getAttribute('method'),
@@ -564,6 +605,8 @@
       var csrftoken = getCookie('csrftoken');
 
       function uploadFile(file) {
+        document.getElementById("csv_info").innerHTML = "Uploading File...";
+
         let url = '{% url "scriptui_post_file_annotation" %}'
         let formData = new FormData()
 
@@ -579,7 +622,9 @@
         .then((rsp) => rsp.json())
         .then(data => {
           console.log(data);
+          // update the form and also load CSV
           document.getElementById("File_Annotation").value = data.fileAnnId;
+          loadCsvFileAnnotation(data.fileAnnId);
         })
         .catch(() => { alert("File upload failed")})
       }

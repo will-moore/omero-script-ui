@@ -22,6 +22,8 @@ from django.http import JsonResponse
 from omeroweb.webclient.decorators import login_required
 from omeroweb.webclient.controller.container import BaseContainer
 
+from .util import read_csv
+
 ALLOWED_PARAM = {
     "Project": ["Project", "Dataset", "Image"],
     "Dataset": ["Dataset", "Image"],
@@ -99,3 +101,30 @@ def post_file_annotation(request, conn=None, **kwargs):
             fileann_id = manager.createFileAnnotations(fileupload, [])
 
     return JsonResponse({'fileAnnId': fileann_id})
+
+
+@login_required()
+def read_csv_annotation(request, annId, conn=None, **kwargs):
+    """
+    Use read_csv() function copied from Import_from_csv script
+    Returns JSON of rows (first 10), header, namespaces and row_count
+    """
+
+    file_ann = conn.getObject("Annotation", annId)
+    if file_ann is None:
+        return JsonResponse({"Error": "Annotation not Found"})
+    original_file = file_ann.getFile()
+    if original_file is None:
+        return JsonResponse({"Error": "Annotation has no Original File"})
+    delimiter = None
+    import_tags = True
+    rows, header, namespaces = read_csv(conn, original_file._obj,
+                                        delimiter, import_tags)
+    # Don't send all the rows back - just need enough for preview
+    row_count = len(rows)
+    rows = rows[:10]
+    rsp = {
+        "rows": rows, "header": header,
+        "namespaces": namespaces, "row_count": row_count
+    }
+    return JsonResponse(rsp)
