@@ -5,6 +5,7 @@ import csv
 from omero.util.populate_roi import DownloadingOriginalFileProvider
 from omero.constants.metadata import NSCLIENTMAPANNOTATION
 
+
 def read_csv(conn, original_file, delimiter, import_tags):
     """ Dedicated function to read the CSV file """
     print("Using FileAnnotation",
