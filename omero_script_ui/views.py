@@ -111,20 +111,31 @@ def read_csv_annotation(request, ann_id, conn=None, **kwargs):
     """
 
     file_ann = conn.getObject("Annotation", ann_id)
+    separator = request.GET.get("separator", None)
+    if separator == "TAB":
+        separator = "\t"
+    elif separator == "guess":
+        separator = None
+
     if file_ann is None:
         return JsonResponse({"Error": "Annotation not Found"})
     original_file = file_ann.getFile()
     if original_file is None:
         return JsonResponse({"Error": "Annotation has no Original File"})
-    delimiter = None
+
     import_tags = True
-    rows, header, namespaces = read_csv(conn, original_file._obj,
-                                        delimiter, import_tags)
-    # Don't send all the rows back - just need enough for preview
-    row_count = len(rows)
-    rows = rows[:10]
-    rsp = {
-        "rows": rows, "header": header,
-        "namespaces": namespaces, "row_count": row_count
-    }
+    try:
+        rows, header, namespaces = read_csv(conn, original_file._obj,
+                                            separator, import_tags)
+        # Don't send all the rows back - just need enough for preview
+        row_count = len(rows)
+        rows = rows[:10]
+        rsp = {
+            "rows": rows, "header": header,
+            "namespaces": namespaces, "row_count": row_count
+        }
+    except Exception as ex:
+        rsp = {
+            "Error": str(ex)
+        }
     return JsonResponse(rsp)
