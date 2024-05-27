@@ -73,12 +73,8 @@
     <link rel="icon" href="/favicon.ico" type="image/x-icon" />
   </head>
   <body>
-    <form id="script_form" method="post" action="/webclient/script_run/455663/">
-      <input
-        type="hidden"
-        name="csrfmiddlewaretoken"
-        value="8m0lyMYLMNUrj46AQeZwkPUyBWOoyKfE19C1hKRmpnBwCqsXZbxrYl3S8AnHap4I"
-      />
+    <form id="script_form" method="post" action="{% url 'script_run' script_id %}">
+      {% csrf_token %}
       <div style="padding: 10px; margin-bottom: 40px">
         <h3 id="scriptName">Import from CSV</h3>
         <div id="script_desc">
