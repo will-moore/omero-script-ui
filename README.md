@@ -37,6 +37,34 @@ In the case of `Import_from_csv.py`, the following improvements were made:
  - Allow the user to select a table column that contains target object identifiers.
 
 
+Add a JavaScript Framework and build tool
+-----------------------------------------
+
+We'll use [vite.js](https://vitejs.dev/) to build our JavaScript bundle, choosing the same
+name for our project as above: `omero-script-ui`. I have also chosen to use React and
+Vanilla JavaScript...
+
+    cd omero-script-ui
+    mkdir TEMP && cd TEMP
+    npm create vite@latest
+    ✔ Project name: … omero-script-ui
+    ✔ Select a framework: › React
+    ✔ Select a variant: › JavaScript
+
+    # Combine the projects:
+    cat omero-script-ui/.gitignore >> ../../omero-script-ui/.gitignore
+    rm omero-script-ui/.gitignore 
+    rm omero-script-ui/README.md     # don't need this
+    mv omero-script-ui/* ../../omero-script-ui/
+    mv omero-script-ui/.eslintrc.cjs ../../omero-script-ui/
+    cd ../ && rm -rf TEMP
+
+    # we can now run Vite dev server
+    cd omero-script-ui
+    npm install
+    npm run dev
+
+
 Installation
 ============
 
