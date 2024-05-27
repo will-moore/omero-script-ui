@@ -2,6 +2,9 @@ build
 node_modules
 *.pyc
 *.DS_Store
+omero_script_ui/static/omero_script_ui/assets/*
+omero_script_ui/templates/omero_script_ui/
+
 # Logs
 logs
 *.log
