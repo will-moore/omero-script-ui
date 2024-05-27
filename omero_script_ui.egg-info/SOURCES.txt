@@ -1,0 +1,16 @@
+CHANGELOG.md
+LICENSE
+MANIFEST.in
+README.md
+setup.py
+omero_script_ui/__init__.py
+omero_script_ui/urls.py
+omero_script_ui/views.py
+omero_script_ui.egg-info/PKG-INFO
+omero_script_ui.egg-info/SOURCES.txt
+omero_script_ui.egg-info/dependency_links.txt
+omero_script_ui.egg-info/not-zip-safe
+omero_script_ui.egg-info/top_level.txt
+omero_script_ui/static/omero_script_ui/app.css
+omero_script_ui/static/omero_script_ui/app.js
+omero_script_ui/templates/omero_script_ui/index.html
