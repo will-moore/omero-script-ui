@@ -48,14 +48,16 @@ ALLOWED_PARAM = {
 def index(request, conn=None, **kwargs):
     # We can load data from OMERO via Blitz Gateway connection.
     # See https://docs.openmicroscopy.org/latest/omero/developers/Python.html
-    experimenter = conn.getUser()
+
+    # TODO: add experimenter info to the html page below
+    # experimenter = conn.getUser()
 
     # A dictionary of data to pass to the html template
-    context = {
-        "firstName": experimenter.firstName,
-        "lastName": experimenter.lastName,
-        "experimenterId": experimenter.id,
-    }
+    # context = {
+    #     "firstName": experimenter.firstName,
+    #     "lastName": experimenter.lastName,
+    #     "experimenterId": experimenter.id,
+    # }
     # print can be useful for debugging, but remove in production
     # print('context', context)
 
